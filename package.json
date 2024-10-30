@@ -1,38 +1,38 @@
 {
-  "name": "desafio---02-aws-node-set-24",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.8.2",
-    "@typescript-eslint/eslint-plugin": "^8.12.1",
-    "@typescript-eslint/parser": "^8.12.1",
-    "eslint": "^9.13.0",
-    "eslint-config-prettier": "^9.1.0",
-    "globals": "^15.11.0",
-    "prettier": "^3.3.3",
-    "sequelize-cli": "^6.6.2",
-    "ts-node-dev": "^2.0.0",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.12.2"
-  },
-  "dependencies": {
-    "celebrate": "^15.0.3",
-    "cors": "^2.8.5",
-    "express": "^4.21.1",
-    "express-async-errors": "^3.1.1",
-    "mysql2": "^3.11.3",
-    "sequelize": "^6.37.5"
-  }
+    "name": "desafio---02-aws-node-set-24",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
+        "start": "ts-node src/server.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@eslint/js": "^9.13.0",
+        "@types/dotenv": "^8.2.3",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.8.4",
+        "@types/sequelize": "^4.28.20",
+        "@typescript-eslint/eslint-plugin": "^8.12.1",
+        "@typescript-eslint/parser": "^8.12.1",
+        "eslint": "^9.13.0",
+        "eslint-config-prettier": "^9.1.0",
+        "globals": "^15.11.0",
+        "prettier": "^3.3.3",
+        "sequelize-cli": "^6.6.2",
+        "ts-node-dev": "^2.0.0",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.6.3",
+        "typescript-eslint": "^8.12.2"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1",
+        "mysql2": "^3.11.3",
+        "sequelize": "^6.37.5"
+    }
 }
