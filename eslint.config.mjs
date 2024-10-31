@@ -5,9 +5,6 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'prettier';
 
 export default [
-    {
-        ignores: ['node_modules', 'dist', 'build', '/*.js'],
-    },
     { files: ['**/*.{js,mjs,cjs,ts}'] },
     {
         languageOptions: {
@@ -47,9 +44,6 @@ export default [
     },
     eslintConfigPrettier,
     {
-        env: {
-            node: true,
-            es6: true,
-        },
+        ignores: ['node_modules', 'dist', 'build', '/*.js'],
     },
 ];
