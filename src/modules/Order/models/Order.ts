@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '@config/sequelize';
+import sequelize from '../../../config/sequelize';
 
 class Order extends Model {
     declare id: number;
@@ -25,7 +25,7 @@ Order.init(
         cliente: {
             type: DataTypes.INTEGER,
             allowNull: false,
-           /* references: {
+            /* references: {
                 model: Customer, // nome do model cliente
                 key: 'id'
             }*/
@@ -83,7 +83,7 @@ Order.init(
             },
         },
     },
-    { sequelize, paranoid: true, timestamps: true, tableName: 'orders' }
+    { sequelize, paranoid: true, timestamps: true, tableName: 'orders' },
 );
 
 export default Order;

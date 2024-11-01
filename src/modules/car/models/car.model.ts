@@ -1,6 +1,5 @@
 import sequelize from '../../../config/sequelize';
 import { DataTypes, Model } from 'sequelize';
-import { v4 as uuidv4 } from 'uuid';
 
 class Car extends Model {
     public id!: string;
@@ -21,7 +20,7 @@ Car.init(
     {
         id: {
             type: DataTypes.UUID,
-            defaultValue: uuidv4,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         plate: {
