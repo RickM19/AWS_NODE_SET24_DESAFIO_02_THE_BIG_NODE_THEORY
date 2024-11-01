@@ -4,7 +4,9 @@ import express from 'express';
 import sequelize from '../../config/sequelize';
 import cors from 'cors';
 import 'express-async-errors';
-import { errorHandler } from './middlewares/errorHandler';
+import { globalErrorHandler } from './middlewares/globalErrorHandler';
+import routes from './routes';
+import { errors } from 'celebrate';
 
 const app = express();
 
@@ -14,8 +16,10 @@ app.use(express.json());
 app.get('/healthcheck', (_req, res) => {
     res.status(200).send({ message: 'Server is up and running!' });
 });
+app.use('/api/v2/', routes);
 
-app.use(errorHandler);
+app.use(errors());
+app.use(globalErrorHandler);
 const startServer = async () => {
     try {
         await sequelize.authenticate();

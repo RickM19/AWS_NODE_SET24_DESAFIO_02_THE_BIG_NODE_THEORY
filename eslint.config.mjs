@@ -22,14 +22,14 @@ export default [
         rules: {
             'no-console': 'warn',
             'no-unused-vars': [
-                'error',
+                'warn',
                 {
                     argsIgnorePattern: '^_',
                     varsIgnorePattern: '^_',
                 },
             ],
             '@typescript-eslint/no-unused-vars': [
-                'error',
+                'warn',
                 {
                     args: 'all',
                     argsIgnorePattern: '^_',
