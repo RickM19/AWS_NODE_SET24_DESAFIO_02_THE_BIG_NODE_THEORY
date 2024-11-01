@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '@config/sequelize';
+import sequelize from '../../../config/sequelize';
 
 class User extends Model {
     declare id: string;
@@ -23,11 +23,17 @@ User.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
+            validate: {
+                is: /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i,
+            },
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
         },
     },
-    { sequelize, paranoid: true, tableName: 'users' },
+    { sequelize, paranoid: true, tableName: 'users', timestamps: true },
 );
+
+export default User;
