@@ -1,14 +1,19 @@
 'use strict';
 /* eslint-disable */
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('cars', {
             id: {
-                type: Sequelize.INTEGER,
-                autoIncrement: true,
+                type: Sequelize.UUID,
+                defaultValue: Sequelize.UUIDV4,
                 primaryKey: true,
+            },
+            plate: {
+                type: Sequelize.STRING,
                 allowNull: false,
+                unique: true,
             },
             brand: {
                 type: Sequelize.STRING,
@@ -18,12 +23,29 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
+            km: {
+                type: Sequelize.INTEGER,
+                allowNull: true,
+            },
             year: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            color: {
-                type: Sequelize.STRING,
+            items: {
+                type: Sequelize.JSON,
+                allowNull: false,
+            },
+            price: {
+                type: Sequelize.FLOAT,
+                allowNull: false,
+            },
+            registrationDate: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
+            },
+            status: {
+                type: Sequelize.ENUM('active', 'inactive', 'deleted'),
                 allowNull: false,
             },
             createdAt: {
@@ -38,13 +60,11 @@ module.exports = {
             },
             deletedAt: {
                 type: Sequelize.DATE,
-                allowNull: true,
-                defaultValue: Sequelize.NOW,
             },
         });
     },
 
-    async down(queryInterface, Sequelize) {
+    down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('cars');
     },
 };
