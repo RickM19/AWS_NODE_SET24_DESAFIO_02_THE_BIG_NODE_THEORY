@@ -72,7 +72,7 @@ export default class CreaterOrderService {
         //criar pedido
         const order = await Order.create({
             email,
-            plate,
+            CarroPedido: car.id,
             CEP,
             cidade, // pegar da API externa
             uf, // pegar da API externa
