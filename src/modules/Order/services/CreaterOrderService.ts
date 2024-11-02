@@ -1,7 +1,7 @@
 import { AppError } from "../../../shared/errors/AppError";
 import { Order } from "../models/Order";
 import { car } from "../../car/models/car.model";
-//import { customer } from "../../Customer/models/Customer"
+import { customer } from "../../customer/models/Customer"
 
 interface ExecuteParams {
     email: string;
@@ -13,11 +13,11 @@ export default class CreaterOrderService {
     public async execute({ email, plate, CEP }: ExecuteParams) {
         try {
             //verificar se o cliente existe
-        const customer = await Customer.findOne({
+        const customers = await customer.findOne({
             where: { email }
         });
 
-        if (!customer) {
+        if (!customers) {
             throw new AppError(
                 'Cliente não encontrado',
                 404,
