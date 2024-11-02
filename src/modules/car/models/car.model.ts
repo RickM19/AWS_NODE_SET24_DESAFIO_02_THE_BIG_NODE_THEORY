@@ -14,6 +14,7 @@ class Car extends Model {
     public status!: 'active' | 'inactive' | 'deleted';
     public createdAt!: Date;
     public updatedAt!: Date;
+    public deletedAt!: Date | null;
 }
 
 Car.init(
@@ -44,14 +45,27 @@ Car.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
-                max: new Date().getFullYear() + 1 - 11,
+                isRecentYear(value: number) {
+                    const currentYear = new Date().getFullYear();
+                    if (value < currentYear - 11) {
+                        throw new Error(
+                            'O carro não pode ter mais de 11 anos.',
+                        );
+                    }
+                },
             },
         },
         items: {
             type: DataTypes.ARRAY(DataTypes.STRING),
             allowNull: false,
             validate: {
-                len: [0, 5],
+                arrayLength(value: string[]) {
+                    if (value.length < 1 || value.length > 5) {
+                        throw new Error(
+                            'Items must contain between 1 and 5 unique items',
+                        );
+                    }
+                },
                 isUnique(value: string[]) {
                     if (new Set(value).size !== value.length) {
                         throw new Error('Items cannot contain duplicates');
@@ -79,6 +93,7 @@ Car.init(
     {
         sequelize,
         paranoid: true,
+        timestamps: true,
         tableName: 'cars',
     },
 );
