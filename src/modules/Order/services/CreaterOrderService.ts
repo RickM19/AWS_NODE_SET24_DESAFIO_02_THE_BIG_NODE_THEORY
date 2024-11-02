@@ -2,6 +2,7 @@ import { AppError } from "../../../shared/errors/AppError";
 import { Order } from "../models/Order";
 import { car } from "../../car/models/car.model";
 import { customer } from "../../customer/models/Customer"
+import axios from "axios";
 
 interface ExecuteParams {
     email: string;
