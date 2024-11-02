@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../../../config/sequelize';
+import sequelize from '../../../config/sequelize';
 
 export class Customer extends Model {
     public id!: string; // Identificador único
@@ -32,3 +32,5 @@ Customer.init(
         tableName: 'customers',
     },
 );
+
+export default Customer;
