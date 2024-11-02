@@ -6,11 +6,14 @@ import cors from 'cors';
 import 'express-async-errors';
 import { errorHandler } from './middlewares/errorHandler';
 
+import carRoute from '../../modules/car/routes/carRoute';
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/v1/cars', carRoute);
 app.get('/healthcheck', (_req, res) => {
     res.status(200).send({ message: 'Server is up and running!' });
 });
