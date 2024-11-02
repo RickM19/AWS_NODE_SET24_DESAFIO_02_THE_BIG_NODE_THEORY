@@ -1,7 +1,6 @@
 import Car from '../models/car.model';
 import { v4 as uuidv4 } from 'uuid';
 
-// Definindo uma interface para os dados do carro
 interface CarData {
     plate: string;
     brand: string;

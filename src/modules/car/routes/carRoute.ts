@@ -2,13 +2,14 @@
 // @ts-nocheck
 import { Router } from 'express';
 import CarController from '../controllers/carController';
+import isAuthenticated from 'src/shared/http/middlewares/isAuthenticated';
 
 const carRoute = Router();
 
-carRoute.post('/create', CarController.create);
-carRoute.get('/', CarController.getAll);
-carRoute.get('/:id', CarController.getById);
-carRoute.put('/:id', CarController.update);
-carRoute.delete('/:id', CarController.deleteCar);
+carRoute.post('/create', isAuthenticated, CarController.create);
+carRoute.get('/', isAuthenticated, CarController.getAll);
+carRoute.get('/:id', isAuthenticated, CarController.getById);
+carRoute.put('/:id', isAuthenticated, CarController.update);
+carRoute.delete('/:id', isAuthenticated, CarController.deleteCar);
 
 export default carRoute;
