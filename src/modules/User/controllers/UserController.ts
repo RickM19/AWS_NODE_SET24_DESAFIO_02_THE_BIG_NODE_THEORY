@@ -27,6 +27,7 @@ export default class UserController {
         const { nameOrder, createOrder, deleteOrder } = req.query;
         const { page, limit } = req.query;
         let justActive = false;
+        console.log(deleteOrder);
         const listUser = new ListUserService();
         if (excludeds === 'no') {
             justActive = true;
@@ -37,9 +38,9 @@ export default class UserController {
             justActive,
         };
         const order = {
-            nameOrder: nameOrder?.toString().toUpperCase(),
-            createOrder: createOrder?.toString().toUpperCase(),
-            deleteOrder: deleteOrder?.toString().toUpperCase(),
+            nameOrder: (nameOrder as string) || 'ASC',
+            createOrder: (createOrder as string) || 'DESC',
+            deleteOrder: (deleteOrder as string) || 'DESC',
         };
 
         const paginate = {
