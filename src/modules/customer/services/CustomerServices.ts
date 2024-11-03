@@ -2,6 +2,7 @@ import Customer from '../models/Customer';
 import { AppError } from '../../../shared/errors/AppError';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
+import { ParsedQs } from 'qs';
 
 interface ICustomerData {
     nome: string;
@@ -40,6 +41,21 @@ interface IWhereFilter {
 }
 
 class CustomerService {
+    static deleteCustomer(id: string) {
+        throw new Error('Method not implemented.');
+    }
+    static updateCustomer(id: string, body: any) {
+        throw new Error('Method not implemented.');
+    }
+    static getCustomers(query: ParsedQs) {
+        throw new Error('Method not implemented.');
+    }
+    static getCustomerById(id: string) {
+        throw new Error('Method not implemented.');
+    }
+    static createCustomer(body: any) {
+        throw new Error('Method not implemented.');
+    }
     public async createCustomer(data: ICustomerData): Promise<Customer> {
         // Validação de dados
         const { nome, dataNascimento, cpf, email, telefone } = data;

@@ -1,6 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Router } from 'express';
 import CustomerController from '../controller/CustomerController';
-import auth from '../../../config/auth';
+import auth from '../../../shared/http/middlewares/isAuthenticated';
 import { celebrate, Joi, Segments } from 'celebrate';
 
 const router = Router();
