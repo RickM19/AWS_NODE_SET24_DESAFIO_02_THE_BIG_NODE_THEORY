@@ -10,7 +10,7 @@ interface IRequest {
 }
 
 interface IResponse {
-    user: User;
+    data: object;
     token: string;
 }
 
@@ -19,7 +19,7 @@ export default class CreateSessionService {
         const user = await User.findOne({ where: { email }, raw: true });
         if (!user) {
             throw new AppError(
-                'Combinação de email e senha incorretas. Por favor, tente novamente!',
+                'Incorrect email and password combination. Please try again!',
                 401,
             );
         }
@@ -28,7 +28,7 @@ export default class CreateSessionService {
 
         if (!passwordMatchs) {
             throw new AppError(
-                'Combinação de email e senha incorretas. Por favor, tente novamente!',
+                'Incorrect email and password combination. Please try again!',
                 401,
             );
         }
@@ -36,8 +36,14 @@ export default class CreateSessionService {
             subject: user.id,
             expiresIn: authConfig.jwt.expiresIn,
         });
+        const data = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+        };
+
         return {
-            user,
+            data,
             token,
         };
     }

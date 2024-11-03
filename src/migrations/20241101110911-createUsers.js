@@ -18,7 +18,6 @@ module.exports = {
             email: {
                 type: Sequelize.STRING,
                 allowNull: false,
-                unique: true,
             },
             password: {
                 type: Sequelize.STRING,
@@ -27,17 +26,18 @@ module.exports = {
             createdAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: new Date(),
+                defaultValue: Sequelize.NOW,
             },
             updatedAt: {
                 type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: new Date(),
+                defaultValue: Sequelize.NOW,
+                onUpdate: Sequelize.NOW,
             },
             deletedAt: {
                 type: Sequelize.DATE,
                 allowNull: true,
-                defaultValue: new Date(),
+                defaultValue: null,
             },
         });
     },

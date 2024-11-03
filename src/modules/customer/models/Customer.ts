@@ -34,3 +34,5 @@ Customer.init(
         paranoid: true,
     },
 );
+
+export default Customer;

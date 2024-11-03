@@ -9,13 +9,19 @@ import routes from './routes';
 import { errors } from 'celebrate';
 import customerRoutes from '../../modules/customer/routes/CustomerRoutes';
 
+import carRoute from '../../modules/car/routes/carRoute';
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+<<<<<<< HEAD
 app.use('/api', customerRoutes);
 
+=======
+app.use('/api/v1/cars', carRoute);
+>>>>>>> develop
 app.get('/healthcheck', (_req, res) => {
     res.status(200).send({ message: 'Server is up and running!' });
 });
