@@ -9,9 +9,10 @@ import isAuthenticated from '../../../shared/http/middlewares/isAuthenticated';
 const userRoutes = Router();
 const userController = new UserController();
 
+userRoutes.use(isAuthenticated);
+
 userRoutes.post(
     '/',
-    isAuthenticated,
     celebrate({
         [Segments.BODY]: {
             name: Joi.string().required(),
@@ -21,6 +22,27 @@ userRoutes.post(
     }),
     userController.create,
 );
-userRoutes.delete('/:id', userController.remove);
+
+userRoutes.get('/', userController.List);
+
+userRoutes.get(
+    '/:id',
+    celebrate({
+        [Segments.PARAMS]: {
+            id: Joi.string().uuid().required(),
+        },
+    }),
+    userController.show,
+);
+
+userRoutes.delete(
+    '/:id',
+    celebrate({
+        [Segments.PARAMS]: {
+            id: Joi.string().uuid().required(),
+        },
+    }),
+    userController.remove,
+);
 
 export default userRoutes;

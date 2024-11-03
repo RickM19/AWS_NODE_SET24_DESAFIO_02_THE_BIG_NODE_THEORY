@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { Router } from 'express';
 import CarController from '../controllers/carController';
-import isAuthenticated from 'src/shared/http/middlewares/isAuthenticated';
+import isAuthenticated from '../../../shared/http/middlewares/isAuthenticated';
 
 const carRoute = Router();
 
