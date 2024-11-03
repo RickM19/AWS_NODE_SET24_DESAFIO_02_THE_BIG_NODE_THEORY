@@ -1,7 +1,7 @@
 import { AppError } from '../../../shared/errors/AppError';
 import Order from '../models/Order';
-import car from '../../car/models/car.model';
-import customer from '../../customer/models/Customer';
+import Car from '../../car/models/car.model';
+import Customer from '../../customer/models/Customer';
 import axios from 'axios';
 
 interface ExecuteParams {
@@ -14,7 +14,7 @@ export default class CreaterOrderService {
     public async execute({ email, plate, CEP }: ExecuteParams) {
         try {
             //verificar se o cliente existe
-            const customers = await customer.findOne({
+            const customers = await Customer.findOne({
                 where: { email },
             });
 
@@ -23,7 +23,7 @@ export default class CreaterOrderService {
             }
 
             //verificar se o carro existe
-            const searchCar = await car.findOne({
+            const searchCar = await Car.findOne({
                 where: { plate },
             });
 
@@ -59,11 +59,11 @@ export default class CreaterOrderService {
             //criar pedido
             const order = await Order.create({
                 email,
-                CarroPedido: car.id,
+                CarroPedido: searchCar.id,
                 CEP,
                 cidade, // pegar da API externa
                 uf, // pegar da API externa
-                valorTotal: car.preco, // Usar o preço do carro encontrado
+                valorTotal: searchCar.price, // Usar o preço do carro encontrado
                 dataInicial: null,
                 dataFinal: null,
                 dataCancelamento: null,
