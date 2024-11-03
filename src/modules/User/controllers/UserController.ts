@@ -3,6 +3,7 @@ import CreateUserService from '../services/CreateUserService';
 import DeleteUserService from '../services/DeleteUserService';
 import ListUserService from '../services/ListUserService';
 import ShowUserService from '../services/ShowUserService';
+import UpdateUserService from '../services/UpdateUserService';
 
 interface IFilter {
     name?: string;
@@ -26,6 +27,7 @@ export default class UserController {
         const { nameOrder, createOrder, deleteOrder } = req.query;
         const { page, limit } = req.query;
         let justActive = false;
+        console.log(deleteOrder);
         const listUser = new ListUserService();
         if (excludeds === 'no') {
             justActive = true;
@@ -36,9 +38,9 @@ export default class UserController {
             justActive,
         };
         const order = {
-            nameOrder: nameOrder?.toString().toUpperCase(),
-            createOrder: createOrder?.toString().toUpperCase(),
-            deleteOrder: deleteOrder?.toString().toUpperCase(),
+            nameOrder: (nameOrder as string) || 'ASC',
+            createOrder: (createOrder as string) || 'DESC',
+            deleteOrder: (deleteOrder as string) || 'DESC',
         };
 
         const paginate = {
@@ -63,6 +65,17 @@ export default class UserController {
 
         const user = await showUser.execute(id);
         return res.status(200).json({ user });
+    }
+
+    public async update(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params;
+        const { name, email, password } = req.body;
+
+        const updateUser = new UpdateUserService();
+
+        await updateUser.execute(id, { name, email, password });
+
+        return res.status(204).json({});
     }
 
     public async remove(req: Request, res: Response): Promise<Response> {

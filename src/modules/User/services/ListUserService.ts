@@ -9,9 +9,9 @@ interface IFilter {
 }
 
 interface IOrder {
-    nameOrder?: string;
-    createOrder?: string;
-    deleteOrder?: string;
+    nameOrder: string;
+    createOrder: string;
+    deleteOrder: string;
 }
 interface IPaginate {
     page: number;
@@ -32,11 +32,7 @@ interface IWhereFilter {
 export default class ListUserService {
     public async execute(
         { name, email, justActive }: IFilter,
-        {
-            nameOrder = 'ASC',
-            createOrder = 'DESC',
-            deleteOrder = 'DESC',
-        }: IOrder,
+        { nameOrder, createOrder, deleteOrder }: IOrder,
         { page, limit }: IPaginate,
     ): Promise<IResponse> {
         const whereFilter: IWhereFilter = {};

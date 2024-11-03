@@ -1,27 +1,42 @@
 'use strict';
-
 /* eslint-disable */
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('users', {
+    up: async (queryInterface, Sequelize) => {
+        await queryInterface.createTable('customers', {
             id: {
                 type: Sequelize.UUID,
+                defaultValue: Sequelize.UUIDV4,
                 primaryKey: true,
                 allowNull: false,
-                defaultValue: Sequelize.UUIDV4,
             },
-            name: {
+            fullName: {
                 type: Sequelize.STRING,
                 allowNull: false,
+            },
+            birthDate: {
+                type: Sequelize.DATEONLY,
+                allowNull: false,
+            },
+            cpf: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true,
             },
             email: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                unique: true,
             },
-            password: {
+            phone: {
                 type: Sequelize.STRING,
                 allowNull: false,
+            },
+            registrationDate: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
             },
             createdAt: {
                 type: Sequelize.DATE,
@@ -32,17 +47,15 @@ module.exports = {
                 type: Sequelize.DATE,
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
-                onUpdate: Sequelize.NOW,
             },
             deletedAt: {
                 type: Sequelize.DATE,
                 allowNull: true,
-                defaultValue: null,
             },
         });
     },
 
-    async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('users');
+    down: async (queryInterface, Sequelize) => {
+        await queryInterface.dropTable('customers');
     },
 };
