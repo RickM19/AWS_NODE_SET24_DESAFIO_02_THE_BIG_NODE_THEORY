@@ -16,15 +16,16 @@ export default class UpdateUserService {
         if (!userExists) {
             throw new AppError('User not found!', 404);
         }
-        if (email && email != userExists.email) {
+        if (email) {
             const userWithEmail = await User.findOne({ where: { email } });
-            if (userWithEmail) {
+            if (userWithEmail && userWithEmail.id != userExists.id) {
                 throw new AppError(
                     'An account with this email already exists.',
                     409,
                 );
             }
         }
+
         const updatedValues: IUpdatedProperties = {};
         if (email) {
             updatedValues.email = email;
@@ -36,7 +37,6 @@ export default class UpdateUserService {
             updatedValues.password = password;
         }
         await User.update(updatedValues, { where: { id } });
-
         return;
     }
 }
