@@ -25,7 +25,7 @@ module.exports = {
         DataInicial: {
             type: Sequelize.DATE,
             allowNull: true,
-            defaultValue: null,
+            defaultValue: Sequelize.NOW,
             validate: {
                 isDate: true, // validação para garantir que seja válida
             },
