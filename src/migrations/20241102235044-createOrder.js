@@ -12,7 +12,7 @@ module.exports = {
             defaultValue: Sequelize.UUIDV4,
         },
         cliente: {
-            type: Sequelize.CHAR,
+            type: Sequelize.UUID,
             allowNull: false,
              references: {
                 model: {
