@@ -1,9 +1,46 @@
 import Customer from '../models/Customer';
 import { AppError } from '../../../shared/errors/AppError';
 import { v4 as uuidv4 } from 'uuid';
+import { Op } from 'sequelize';
+
+interface ICustomerData {
+    nome: string;
+    dataNascimento: Date;
+    cpf: string;
+    email: string;
+    telefone: string;
+}
+
+interface IFilter {
+    nome?: string;
+    cpf?: string;
+    email?: string;
+}
+
+interface IPaginate {
+    page: number;
+    limit: number;
+}
+
+interface IResponse {
+    customers: Customer[];
+    pages: number;
+}
+
+interface IWhereFilter {
+    nome?: {
+        [Op.like]: string;
+    };
+    cpf?: {
+        [Op.like]: string;
+    };
+    email?: {
+        [Op.like]: string;
+    };
+}
 
 class CustomerService {
-    static async createCustomer(data: any) {
+    public async createCustomer(data: ICustomerData): Promise<Customer> {
         // Validação de dados
         const { nome, dataNascimento, cpf, email, telefone } = data;
 
@@ -33,7 +70,7 @@ class CustomerService {
         return customer;
     }
 
-    static async getCustomerById(id: string) {
+    public async getCustomerById(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, dataExclusao: null },
         });
@@ -45,27 +82,51 @@ class CustomerService {
         return customer;
     }
 
-    static async getCustomers(query: any) {
-        // Implemente a lógica de filtragem, ordenação e paginação aqui
+    public async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
         const { page = 1, limit = 10, ...filters } = query;
 
+        const whereFilter: IWhereFilter = {};
+        if (filters.nome) {
+            whereFilter.nome = { [Op.like]: `%${filters.nome}%` };
+        }
+        if (filters.cpf) {
+            whereFilter.cpf = { [Op.like]: `%${filters.cpf}%` };
+        }
+        if (filters.email) {
+            whereFilter.email = { [Op.like]: `%${filters.email}%` };
+        }
+
+        const countCustomers = await Customer.count({
+            where: {
+                dataExclusao: null,
+                ...whereFilter,
+            },
+        });
+
+        const pages = Math.ceil(countCustomers / limit);
         const customers = await Customer.findAll({
             where: {
                 dataExclusao: null,
-                ...filters,
+                ...whereFilter,
             },
             limit,
             offset: (page - 1) * limit,
         });
 
+        if (countCustomers === 0) {
+            throw new AppError('Nenhum cliente encontrado', 404);
+        }
+
         return {
-            data: customers,
-            page,
-            limit,
+            customers,
+            pages,
         };
     }
 
-    static async updateCustomer(id: string, data: any) {
+    public async updateCustomer(
+        id: string,
+        data: Partial<ICustomerData>,
+    ): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, dataExclusao: null },
         });
@@ -78,7 +139,7 @@ class CustomerService {
         return customer;
     }
 
-    static async deleteCustomer(id: string) {
+    public async deleteCustomer(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, dataExclusao: null },
         });
