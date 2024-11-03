@@ -1,8 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../../config/sequelize';
-import  car  from "../../car/models/car.model";
 import  Customer  from "../../customer/models/Customer"
-import Car from '../../car/models/car.model';
+import car from '../../car/models/car.model';
 
 class Order extends Model {
     declare id: string;
@@ -22,6 +21,7 @@ Order.init(
     {
         id: {
             type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             allowNull: false,
             primaryKey: true,
         },
@@ -36,7 +36,7 @@ Order.init(
         DataInicial: {
             type: DataTypes.DATE,
             allowNull: true,
-            defaultValue: null,
+            defaultValue: DataTypes.NOW,
             validate: {
                 isDate: true, // validação para garantir que seja válida
             },
@@ -50,9 +50,7 @@ Order.init(
             type: DataTypes.STRING,
             allowNull: true,
             defaultValue: null,
-            validate: {
-                is: /^\d{5}-?d{3}$/, //validação para o formato
-            },
+
         },
         Cidade: {
             type: DataTypes.STRING,
@@ -73,7 +71,7 @@ Order.init(
             type: DataTypes.UUID,
             allowNull: false,
              references: {
-                model: Car, // nome do model cliente
+                model: car, // nome do model cliente
                 key: 'id'
             }
         },
@@ -102,5 +100,8 @@ Order.init(
         tableName: 'orders'
     },
 );
+
+Order.belongsTo(car, { foreignKey: 'CarroPedido'});
+Order.belongsTo(Customer, { foreignKey: 'cliente'});
 
 export default Order;

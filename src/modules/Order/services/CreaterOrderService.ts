@@ -12,7 +12,6 @@ interface ExecuteParams {
 
 export default class CreaterOrderService {
     public async execute({ email, plate, CEP }: ExecuteParams) {
-
             //verificar se o cliente existe
             const customers = await Customer.findOne({
                 where: { email },
@@ -49,10 +48,17 @@ export default class CreaterOrderService {
                 const data = response.data;
 
                 if (data && !data.erro) {
+                    const ufs = ['AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE'];
+                    if (!ufs.includes(data.uf)) {
+                        throw new AppError(`${data.uf} no momento não temos filiais nessa região`, 400);
+                    }
                     Cidade = data.localidade;
                     UF = data.uf;
                 }
-                throw new AppError('CEP inválido', 400);
+                if (data.erro){
+                    throw new AppError('CEP inválido', 400);
+                }
+
             }
 
             //criar pedido
@@ -63,7 +69,6 @@ export default class CreaterOrderService {
                 Cidade, // pegar da API externa
                 UF, // pegar da API externa
                 ValorTotal: searchCar.price, // Usar o preço do carro encontrado
-                dataInicial: new Date(),
                 dataFinal: null,
                 dataCancelamento: null,
                 status: 'Aberto',
@@ -71,4 +76,5 @@ export default class CreaterOrderService {
 
             return order;
     }
+
 }
