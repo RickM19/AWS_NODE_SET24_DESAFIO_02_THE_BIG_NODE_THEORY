@@ -8,6 +8,6 @@ const routes = Router();
 routes.use('/login', sessionRoutes);
 routes.use('/users', userRoutes);
 
-routes.use('/createOrder', orderRoute);
+routes.use('/Order', orderRoute);
 
 export default routes;
