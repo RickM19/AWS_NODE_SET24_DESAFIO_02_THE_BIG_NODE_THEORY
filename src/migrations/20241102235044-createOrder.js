@@ -1,40 +1,29 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../../config/sequelize';
-import  car  from "../../car/models/car.model";
-import  Customer  from "../../customer/models/Customer"
-import Car from '../../car/models/car.model';
+'use strict';
+/* eslint-disable */
 
-class Order extends Model {
-    declare id: string;
-    declare cliente: string;
-    declare DataInicial: Date;
-    declare status: 'Aberto' | 'Aprovado' | 'Cancelado';
-    declare CEP: string;
-    declare Cidade: string;
-    declare UF: string;
-    declare ValorTotal: number;
-    declare CarroPedido: number;
-    declare DataFinal: Date;
-    declare DataCancelamento: Date;
-}
-
-Order.init(
-    {
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up (queryInterface, Sequelize)  {
+    await queryInterface.createTable('orders', {
         id: {
-            type: DataTypes.UUID,
+            type: Sequelize.UUID,
             allowNull: false,
             primaryKey: true,
+            defaultValue: Sequelize.UUIDV4,
         },
         cliente: {
-            type: DataTypes.UUID,
+            type: Sequelize.CHAR,
             allowNull: false,
              references: {
-                model: Customer, // nome do model cliente
+                model: {
+                    tableName: 'customers', // nome da tabela no bd
+                    },
                 key: 'id'
-            }
+            },
+            onUpdate: 'CASCADE', // se o id do cliente mudar, na tablea orders esse id é atualizado
         },
         DataInicial: {
-            type: DataTypes.DATE,
+            type: Sequelize.DATE,
             allowNull: true,
             defaultValue: null,
             validate: {
@@ -42,12 +31,12 @@ Order.init(
             },
         },
         status: {
-            type: DataTypes.ENUM('Aberto', 'Aprovado', 'Cancelado'),
+            type: Sequelize.ENUM('Aberto', 'Aprovado', 'Cancelado'),
             allowNull: false,
             defaultValue: 'Aberto',
         },
         CEP: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
             defaultValue: null,
             validate: {
@@ -55,30 +44,30 @@ Order.init(
             },
         },
         Cidade: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
             defaultValue: null,
         },
         UF: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
             defaultValue: null,
         },
         ValorTotal: {
-            type: DataTypes.FLOAT,
+            type: Sequelize.DECIMAL(10, 2),
             allowNull: false,
             defaultValue: 0,
         },
         CarroPedido: {
-            type: DataTypes.UUID,
+            type: Sequelize.UUID,
             allowNull: false,
              references: {
-                model: Car, // nome do model cliente
+                model: { tableName: 'cars' }, // nome da tabela no bd
                 key: 'id'
             }
         },
         DataFinal: {
-            type: DataTypes.DATE,
+            type: Sequelize.DATE,
             allowNull: true,
             defaultValue: null,
             validate: {
@@ -86,21 +75,32 @@ Order.init(
             },
         },
         DataCancelamento: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
             defaultValue: null,
             validate: {
                 isDate: true, // validação para garantir que seja válida
             },
         },
-    },
+        createdAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.NOW,
+        },
+        updatedAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.NOW,
+        },
+        deletedAt: {
+            type: Sequelize.DATE,
+            allowNull: true,
+            defaultValue: null,
+        },
+    });
+  },
 
-    {
-        sequelize,
-        paranoid: true,
-        timestamps: true,
-        tableName: 'orders'
-    },
-);
-
-export default Order;
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('orders');
+  }
+};

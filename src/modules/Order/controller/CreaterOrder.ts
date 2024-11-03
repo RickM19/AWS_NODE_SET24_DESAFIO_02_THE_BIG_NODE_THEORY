@@ -9,5 +9,7 @@ export default class CreaterOrderController {
 
         const order = await newOrder.execute({ email, plate, CEP });
         res.status(201).json({ order });
+
     }
+
 }
