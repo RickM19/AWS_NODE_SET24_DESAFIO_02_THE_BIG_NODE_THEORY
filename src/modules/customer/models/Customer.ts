@@ -1,15 +1,15 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../../../config/sequelize';
+import sequelize from '../../../config/sequelize';
 
 export class Customer extends Model {
-    public id!: string; // Identificador único
-    public nome!: string; // Nome do cliente
-    public dataNascimento!: Date; // Data de nascimento
-    public cpf!: string; // CPF do cliente (único)
-    public email!: string; // Email (único)
-    public telefone!: string; // Telefone do cliente
-    public dataCadastro!: Date; // Data de cadastro
-    public dataExclusao!: Date | null; // Data de exclusão, pode ser nula
+    declare id: string; // Identificador único
+    declare nome: string; // Nome do cliente
+    declare dataNascimento: Date; // Data de nascimento
+    declare cpf: string; // CPF do cliente (único)
+    declare email: string; // Email (único)
+    declare telefone: string; // Telefone do cliente
+    declare dataCadastro: Date; // Data de cadastro
+    declare dataExclusao: Date | null; // Data de exclusão, pode ser nula
 }
 
 Customer.init(
@@ -30,5 +30,7 @@ Customer.init(
     {
         sequelize,
         tableName: 'customers',
+        timestamps: true,
+        paranoid: true,
     },
 );

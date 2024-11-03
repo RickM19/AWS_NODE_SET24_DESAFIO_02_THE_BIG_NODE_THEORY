@@ -7,11 +7,14 @@ import 'express-async-errors';
 import { globalErrorHandler } from './middlewares/globalErrorHandler';
 import routes from './routes';
 import { errors } from 'celebrate';
+import customerRoutes from '../../modules/customer/routes/CustomerRoutes';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api', customerRoutes);
 
 app.get('/healthcheck', (_req, res) => {
     res.status(200).send({ message: 'Server is up and running!' });
