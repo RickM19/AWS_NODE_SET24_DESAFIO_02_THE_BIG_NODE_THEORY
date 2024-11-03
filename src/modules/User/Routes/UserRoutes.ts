@@ -34,7 +34,20 @@ userRoutes.get(
     }),
     userController.show,
 );
-
+userRoutes.patch(
+    '/:id',
+    celebrate({
+        [Segments.PARAMS]: {
+            id: Joi.string().uuid().required(),
+        },
+        [Segments.BODY]: {
+            name: Joi.string().optional(),
+            email: Joi.string().email().optional(),
+            password: Joi.string().optional(),
+        },
+    }),
+    userController.update,
+);
 userRoutes.delete(
     '/:id',
     celebrate({
