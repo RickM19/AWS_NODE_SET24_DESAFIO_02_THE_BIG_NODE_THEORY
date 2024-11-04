@@ -52,7 +52,7 @@ class CustomerService {
         const existingCustomer = await Customer.findOne({
             where: {
                 [Op.or]: [{ cpf }, { email }],
-                dataExclusao: null, // Considera apenas clientes ativos
+                deletedAt: null, // Considera apenas clientes ativos
             },
         });
 
@@ -64,7 +64,7 @@ class CustomerService {
         const customer = await Customer.create({
             id: uuidv4(), // Gerar um UUID para o id
             ...data,
-            dataCadastro: new Date(),
+            dataRegistro: new Date(),
         });
 
         return customer;
@@ -72,7 +72,7 @@ class CustomerService {
 
     static async getCustomerById(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
@@ -98,7 +98,7 @@ class CustomerService {
 
         const countCustomers = await Customer.count({
             where: {
-                dataExclusao: null,
+                deletedAt: null,
                 ...whereFilter,
             },
         });
@@ -106,7 +106,7 @@ class CustomerService {
         const pages = Math.ceil(countCustomers / limit);
         const customers = await Customer.findAll({
             where: {
-                dataExclusao: null,
+                deletedAt: null,
                 ...whereFilter,
             },
             limit,
@@ -128,7 +128,7 @@ class CustomerService {
         data: Partial<ICustomerData>,
     ): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
@@ -141,14 +141,14 @@ class CustomerService {
 
     static async deleteCustomer(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
             throw new AppError('Cliente não encontrado');
         }
 
-        await customer.update({ dataExclusao: new Date() });
+        await customer.update({ deletedAt: new Date() });
         return customer;
     }
 }

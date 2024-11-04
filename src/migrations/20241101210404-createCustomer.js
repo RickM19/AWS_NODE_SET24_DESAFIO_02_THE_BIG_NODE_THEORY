@@ -11,11 +11,11 @@ module.exports = {
                 primaryKey: true,
                 allowNull: false,
             },
-            fullName: {
+            nome: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            birthDate: {
+            dataNascimento: {
                 type: Sequelize.DATEONLY,
                 allowNull: false,
             },
@@ -29,11 +29,11 @@ module.exports = {
                 allowNull: false,
                 unique: true,
             },
-            phone: {
+            telefone: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            registrationDate: {
+            dataRegistro: {
                 type: Sequelize.DATE,
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
