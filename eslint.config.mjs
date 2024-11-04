@@ -5,9 +5,6 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import prettier from 'prettier';
 
 export default [
-    {
-        ignores: ['node_modules', 'dist', 'build', '/*.js'],
-    },
     { files: ['**/*.{js,mjs,cjs,ts}'] },
     {
         languageOptions: {
@@ -24,7 +21,29 @@ export default [
         },
         rules: {
             'no-console': 'warn',
+            'no-unused-vars': [
+                'warn',
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                },
+            ],
+            '@typescript-eslint/no-unused-vars': [
+                'warn',
+                {
+                    args: 'all',
+                    argsIgnorePattern: '^_',
+                    caughtErrors: 'all',
+                    caughtErrorsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    ignoreRestSiblings: true,
+                },
+            ],
         },
     },
     eslintConfigPrettier,
+    {
+        ignores: ['node_modules', 'dist', 'build', '/*.js'],
+    },
 ];
