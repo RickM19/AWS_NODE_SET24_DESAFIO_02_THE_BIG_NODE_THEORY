@@ -2,7 +2,7 @@
 // @ts-nocheck
 import { Router } from 'express';
 import CustomerController from '../controller/CustomerController';
-//import auth from '../../../shared/http/middlewares/isAuthenticated';
+import auth from '../../../shared/http/middlewares/isAuthenticated';
 import { celebrate, Joi, Segments } from 'celebrate';
 
 const router = Router();
@@ -53,19 +53,14 @@ const listCustomersValidation = celebrate({
         tamanho: Joi.number().integer().default(10), // Tamanho padrão
     }),
 });
-
+// middleware de autenticação
+router.use(auth);
 // Rota para criar um cliente
-router.post(
-    '/',
-
-    createCustomerValidation,
-    CustomerController.createCustomer,
-);
+router.post('/', createCustomerValidation, CustomerController.createCustomer);
 
 // Rota para obter um cliente pelo ID
 router.get(
     '/:id',
-
     getCustomerByIdValidation,
     CustomerController.getCustomerById,
 );
@@ -74,17 +69,11 @@ router.get(
 router.get('/', listCustomersValidation, CustomerController.getCustomers);
 
 // Rota para atualizar um cliente
-router.put(
-    '/:id',
-
-    updateCustomerValidation,
-    CustomerController.updateCustomer,
-);
+router.put('/:id', updateCustomerValidation, CustomerController.updateCustomer);
 
 // Rota para deletar um cliente (soft delete)
 router.delete(
     '/:id',
-
     getCustomerByIdValidation,
     CustomerController.deleteCustomer,
 );
