@@ -1,9 +1,9 @@
-import Customer from '../models/Customer';
-import { AppError } from '../../../shared/errors/AppError';
-import { v4 as uuidv4 } from 'uuid';
-import { Op } from 'sequelize';
-import { ParsedQs } from 'qs';
+import Customer from '../models/Customer'; // Importa o modelo Customer
+import { AppError } from '../../../shared/errors/AppError'; // Importa a classe de erro personalizada
+import { v4 as uuidv4 } from 'uuid'; // Importa a função para gerar UUIDs
+import { Op } from 'sequelize'; // Importa operadores do Sequelize para consultas
 
+// Interface para definir a estrutura dos dados de um cliente
 interface ICustomerData {
     nome: string;
     dataNascimento: Date;
@@ -12,22 +12,26 @@ interface ICustomerData {
     telefone: string;
 }
 
+// Interface para filtros de busca
 interface IFilter {
     nome?: string;
     cpf?: string;
     email?: string;
 }
 
+// Interface para paginação
 interface IPaginate {
     page: number;
     limit: number;
 }
 
+// Interface para a resposta da consulta de clientes
 interface IResponse {
     customers: Customer[];
     pages: number;
 }
 
+// Interface para filtro com Sequelize
 interface IWhereFilter {
     nome?: {
         [Op.like]: string;
@@ -40,23 +44,10 @@ interface IWhereFilter {
     };
 }
 
+// Classe de serviço para gerenciar operações relacionadas a clientes
 class CustomerService {
-    static deleteCustomer(id: string) {
-        throw new Error('Method not implemented.');
-    }
-    static updateCustomer(id: string, body: any) {
-        throw new Error('Method not implemented.');
-    }
-    static getCustomers(query: ParsedQs) {
-        throw new Error('Method not implemented.');
-    }
-    static getCustomerById(id: string) {
-        throw new Error('Method not implemented.');
-    }
-    static createCustomer(body: any) {
-        throw new Error('Method not implemented.');
-    }
-    public async createCustomer(data: ICustomerData): Promise<Customer> {
+    // Método estático para criar um novo cliente
+    static async createCustomer(data: ICustomerData): Promise<Customer> {
         // Validação de dados
         const { nome, dataNascimento, cpf, email, telefone } = data;
 
@@ -68,7 +59,7 @@ class CustomerService {
         const existingCustomer = await Customer.findOne({
             where: {
                 [Op.or]: [{ cpf }, { email }],
-                dataExclusao: null, // Considera apenas clientes ativos
+                deletedAt: null, // Considera apenas clientes ativos
             },
         });
 
@@ -80,15 +71,16 @@ class CustomerService {
         const customer = await Customer.create({
             id: uuidv4(), // Gerar um UUID para o id
             ...data,
-            dataCadastro: new Date(),
+            dataRegistro: new Date(),
         });
 
         return customer;
     }
 
-    public async getCustomerById(id: string): Promise<Customer> {
+    // Método estático para obter um cliente pelo ID
+    static async getCustomerById(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
@@ -98,7 +90,8 @@ class CustomerService {
         return customer;
     }
 
-    public async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
+    // Método estático para obter uma lista de clientes com filtros e paginação
+    static async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
         const { page = 1, limit = 10, ...filters } = query;
 
         const whereFilter: IWhereFilter = {};
@@ -114,7 +107,7 @@ class CustomerService {
 
         const countCustomers = await Customer.count({
             where: {
-                dataExclusao: null,
+                deletedAt: null,
                 ...whereFilter,
             },
         });
@@ -122,7 +115,7 @@ class CustomerService {
         const pages = Math.ceil(countCustomers / limit);
         const customers = await Customer.findAll({
             where: {
-                dataExclusao: null,
+                deletedAt: null,
                 ...whereFilter,
             },
             limit,
@@ -139,12 +132,13 @@ class CustomerService {
         };
     }
 
-    public async updateCustomer(
+    // Método estático para atualizar os dados de um cliente
+    static async updateCustomer(
         id: string,
         data: Partial<ICustomerData>,
     ): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
@@ -155,18 +149,19 @@ class CustomerService {
         return customer;
     }
 
-    public async deleteCustomer(id: string): Promise<Customer> {
+    // Método estático para deletar um cliente
+    static async deleteCustomer(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
-            where: { id, dataExclusao: null },
+            where: { id, deletedAt: null },
         });
 
         if (!customer) {
             throw new AppError('Cliente não encontrado');
         }
 
-        await customer.update({ dataExclusao: new Date() });
+        await customer.update({ deletedAt: new Date() });
         return customer;
     }
 }
 
-export default CustomerService;
+export default CustomerService; // Exporta a classe CustomerService para uso em outras partes da aplicação

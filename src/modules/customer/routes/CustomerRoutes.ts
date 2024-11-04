@@ -10,14 +10,14 @@ const router = Router();
 // Validações para criação de clientes
 const createCustomerValidation = celebrate({
     [Segments.BODY]: Joi.object().keys({
-        id: Joi.string().guid().required(), // UUID obrigatório
         nome: Joi.string().required(), // Nome completo obrigatório
         dataNascimento: Joi.date().required(), // Data de nascimento obrigatória
         cpf: Joi.string().length(11).required(), // CPF obrigatório (considerando que você irá validar o CPF depois)
         email: Joi.string().email().required(), // E-mail obrigatório
         telefone: Joi.string().required(), // Telefone obrigatório
-        dataCadastro: Joi.date().default(Date.now), // Data do Cadastro padrão para agora
-        dataExclusao: Joi.date().allow(null), // Data de exclusão pode ser nula
+        createdAt: Joi.date().default(Date.now), // Data do Cadastro padrão para agora
+        updatedAt: Joi.date().default(Date.now),
+        deletedAt: Joi.date().allow(null), // Data de exclusão pode ser nula
     }),
 });
 
@@ -53,43 +53,27 @@ const listCustomersValidation = celebrate({
         tamanho: Joi.number().integer().default(10), // Tamanho padrão
     }),
 });
-
+// middleware de autenticação
+router.use(auth);
 // Rota para criar um cliente
-router.post(
-    '/customers',
-    auth,
-    createCustomerValidation,
-    CustomerController.createCustomer,
-);
+router.post('/', createCustomerValidation, CustomerController.createCustomer);
 
 // Rota para obter um cliente pelo ID
 router.get(
-    '/customers/:id',
-    auth,
+    '/:id',
     getCustomerByIdValidation,
     CustomerController.getCustomerById,
 );
 
 // Rota para listar todos os clientes
-router.get(
-    '/customers',
-    auth,
-    listCustomersValidation,
-    CustomerController.getCustomers,
-);
+router.get('/', listCustomersValidation, CustomerController.getCustomers);
 
 // Rota para atualizar um cliente
-router.put(
-    '/customers/:id',
-    auth,
-    updateCustomerValidation,
-    CustomerController.updateCustomer,
-);
+router.put('/:id', updateCustomerValidation, CustomerController.updateCustomer);
 
 // Rota para deletar um cliente (soft delete)
 router.delete(
-    '/customers/:id',
-    auth,
+    '/:id',
     getCustomerByIdValidation,
     CustomerController.deleteCustomer,
 );

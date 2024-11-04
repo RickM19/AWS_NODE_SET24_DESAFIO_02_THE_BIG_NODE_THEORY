@@ -11,7 +11,7 @@ export default function isAuthenticated(
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        throw new AppError('Token de autenticação não encontrado!');
+        throw new AppError('Authorization token is missing!');
     }
 
     const token = authHeader.split(' ')[1];
@@ -21,6 +21,6 @@ export default function isAuthenticated(
 
         return next();
     } catch {
-        throw new AppError('Token de autenticação inválido!');
+        throw new AppError('Invalid authorization token!');
     }
 }
