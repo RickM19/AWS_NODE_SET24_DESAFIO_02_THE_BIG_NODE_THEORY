@@ -16,7 +16,7 @@ app.use(express.json());
 app.get('/healthcheck', (_req, res) => {
     res.status(200).send({ message: 'Server is up and running!' });
 });
-app.use('/api/v2/', routes);
+app.use('/api/v1/', routes);
 
 app.use(errors());
 app.use(globalErrorHandler);
