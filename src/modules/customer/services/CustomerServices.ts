@@ -1,8 +1,9 @@
-import Customer from '../models/Customer';
-import { AppError } from '../../../shared/errors/AppError';
-import { v4 as uuidv4 } from 'uuid';
-import { Op } from 'sequelize';
+import Customer from '../models/Customer'; // Importa o modelo Customer
+import { AppError } from '../../../shared/errors/AppError'; // Importa a classe de erro personalizada
+import { v4 as uuidv4 } from 'uuid'; // Importa a função para gerar UUIDs
+import { Op } from 'sequelize'; // Importa operadores do Sequelize para consultas
 
+// Interface para definir a estrutura dos dados de um cliente
 interface ICustomerData {
     nome: string;
     dataNascimento: Date;
@@ -11,22 +12,26 @@ interface ICustomerData {
     telefone: string;
 }
 
+// Interface para filtros de busca
 interface IFilter {
     nome?: string;
     cpf?: string;
     email?: string;
 }
 
+// Interface para paginação
 interface IPaginate {
     page: number;
     limit: number;
 }
 
+// Interface para a resposta da consulta de clientes
 interface IResponse {
     customers: Customer[];
     pages: number;
 }
 
+// Interface para filtro com Sequelize
 interface IWhereFilter {
     nome?: {
         [Op.like]: string;
@@ -39,7 +44,9 @@ interface IWhereFilter {
     };
 }
 
+// Classe de serviço para gerenciar operações relacionadas a clientes
 class CustomerService {
+    // Método estático para criar um novo cliente
     static async createCustomer(data: ICustomerData): Promise<Customer> {
         // Validação de dados
         const { nome, dataNascimento, cpf, email, telefone } = data;
@@ -70,6 +77,7 @@ class CustomerService {
         return customer;
     }
 
+    // Método estático para obter um cliente pelo ID
     static async getCustomerById(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, deletedAt: null },
@@ -82,6 +90,7 @@ class CustomerService {
         return customer;
     }
 
+    // Método estático para obter uma lista de clientes com filtros e paginação
     static async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
         const { page = 1, limit = 10, ...filters } = query;
 
@@ -123,6 +132,7 @@ class CustomerService {
         };
     }
 
+    // Método estático para atualizar os dados de um cliente
     static async updateCustomer(
         id: string,
         data: Partial<ICustomerData>,
@@ -139,6 +149,7 @@ class CustomerService {
         return customer;
     }
 
+    // Método estático para deletar um cliente
     static async deleteCustomer(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, deletedAt: null },
@@ -153,4 +164,4 @@ class CustomerService {
     }
 }
 
-export default CustomerService;
+export default CustomerService; // Exporta a classe CustomerService para uso em outras partes da aplicação
