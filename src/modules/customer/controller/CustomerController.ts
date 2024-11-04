@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Request, Response, NextFunction } from 'express';
 import CustomerService from '../services/CustomerServices';
 import { AppError } from '../../../shared/errors/AppError';
@@ -42,7 +41,15 @@ class CustomerController {
 
     static async getCustomers(req: Request, res: Response, next: NextFunction) {
         try {
-            const result = await CustomerService.getCustomers(req.query);
+            const { page, limit, nome, cpf, email } = req.query;
+            const query = {
+                page: parseInt(page as string, 10) || 1,
+                limit: parseInt(limit as string, 10) || 10,
+                nome: (nome as string) || undefined,
+                cpf: (cpf as string) || undefined,
+                email: (email as string) || undefined,
+            };
+            const result = await CustomerService.getCustomers(query);
             return res.status(200).json(result);
         } catch (error) {
             if (error instanceof Error) {

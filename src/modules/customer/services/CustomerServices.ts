@@ -2,7 +2,6 @@ import Customer from '../models/Customer';
 import { AppError } from '../../../shared/errors/AppError';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
-import { ParsedQs } from 'qs';
 
 interface ICustomerData {
     nome: string;
@@ -41,22 +40,7 @@ interface IWhereFilter {
 }
 
 class CustomerService {
-    static deleteCustomer(id: string) {
-        throw new Error('Method not implemented.');
-    }
-    static updateCustomer(id: string, body: any) {
-        throw new Error('Method not implemented.');
-    }
-    static getCustomers(query: ParsedQs) {
-        throw new Error('Method not implemented.');
-    }
-    static getCustomerById(id: string) {
-        throw new Error('Method not implemented.');
-    }
-    static createCustomer(body: any) {
-        throw new Error('Method not implemented.');
-    }
-    public async createCustomer(data: ICustomerData): Promise<Customer> {
+    static async createCustomer(data: ICustomerData): Promise<Customer> {
         // Validação de dados
         const { nome, dataNascimento, cpf, email, telefone } = data;
 
@@ -86,7 +70,7 @@ class CustomerService {
         return customer;
     }
 
-    public async getCustomerById(id: string): Promise<Customer> {
+    static async getCustomerById(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, dataExclusao: null },
         });
@@ -98,7 +82,7 @@ class CustomerService {
         return customer;
     }
 
-    public async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
+    static async getCustomers(query: IPaginate & IFilter): Promise<IResponse> {
         const { page = 1, limit = 10, ...filters } = query;
 
         const whereFilter: IWhereFilter = {};
@@ -139,7 +123,7 @@ class CustomerService {
         };
     }
 
-    public async updateCustomer(
+    static async updateCustomer(
         id: string,
         data: Partial<ICustomerData>,
     ): Promise<Customer> {
@@ -155,7 +139,7 @@ class CustomerService {
         return customer;
     }
 
-    public async deleteCustomer(id: string): Promise<Customer> {
+    static async deleteCustomer(id: string): Promise<Customer> {
         const customer = await Customer.findOne({
             where: { id, dataExclusao: null },
         });
