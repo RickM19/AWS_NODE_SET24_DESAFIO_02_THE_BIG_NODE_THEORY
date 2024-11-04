@@ -25,6 +25,11 @@ Esse projeto foi desenvolvido durante a trilha de Node.js do programa de bolsas 
 -   Sequelize
 -   MySQL
 -   Typescript
+-   Axios
+-   Jswonwebtoken
+-   Celebrate
+-   Bcrypt
+-   Eslint
 
 ## ROTAS
 
